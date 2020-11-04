@@ -1,0 +1,178 @@
+{% extends "layout.html" %}
+{% block script %}
+<!-- Code for world map-->
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+<script src="https://code.highcharts.com/maps/modules/data.js"></script>
+<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
+<script src="https://code.highcharts.com/mapdata/custom/world.js"></script>
+
+<!-- Flag sprites service provided by Martijn Lafeber, https://github.com/lafeber/world-flags-sprite/blob/master/LICENSE -->
+<link rel="stylesheet" type="text/css" href="//github.com/downloads/lafeber/world-flags-sprite/flags32.css" />
+<style>
+    /* Add some padding on document's body to prevent the content
+        to go underneath the header and footer */
+#container {
+    height: 500px; 
+    width: 800px; 
+    margin: 0 auto; 
+}
+
+.highcharts-tooltip>span {
+    padding: 10px;
+    white-space: normal !important;
+    width: 200px;
+}
+
+.loading {
+    margin-top: 10em;
+    text-align: center;
+    color: gray;
+}
+
+.f32 .flag {
+    vertical-align: middle !important;
+}
+</style>
+{% endblock script %}
+
+{% block my_content %}
+<div id="container"></div>
+<script>
+    Highcharts.getJSON('https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/world-population-density.json', function (data) {
+
+            // Prevent logarithmic errors in color calulcation
+            data.forEach(function (p) {
+                p.value = (p.value < 1 ? 1 : p.value);
+            });
+
+            // Initiate the chart
+            Highcharts.mapChart('container', {
+
+                chart: {
+                    map: 'custom/world'
+                },
+
+                title: {
+                    text: 'Fixed tooltip with HTML'
+                },
+
+                legend: {
+                    title: {
+                        text: 'Population density per km²',
+                        style: {
+                            color: ( // theme
+                                Highcharts.defaultOptions &&
+                                Highcharts.defaultOptions.legend &&
+                                Highcharts.defaultOptions.legend.title &&
+                                Highcharts.defaultOptions.legend.title.style &&
+                                Highcharts.defaultOptions.legend.title.style.color
+                            ) || 'black'
+                        }
+                    }
+                },
+
+                mapNavigation: {
+                    enabled: true,
+                    buttonOptions: {
+                        verticalAlign: 'bottom'
+                    }
+                },
+
+                tooltip: {
+                    backgroundColor: 'none',
+                    borderWidth: 0,
+                    shadow: false,
+                    useHTML: true,
+                    padding: 0,
+                    pointFormat: '<span class="f32"><span class="flag {point.properties.hc-key}">' +
+                        '</span></span> {point.name}<br>' +
+                        '<span style="font-size:30px">{point.value}/km²</span>',
+                    positioner: function () {
+                        return { x: 0, y: 250 };
+                    }
+                },
+
+                colorAxis: {
+                    min: 1,
+                    max: 1000,
+                    type: 'logarithmic'
+                },
+
+                series: [{
+                    data: data,
+                    joinBy: ['iso-a3', 'code3'],
+                    name: 'Population density',
+                    states: {
+                        hover: {
+                            color: '#a4edba'
+                        }
+                    }
+                }]
+            });
+        });
+</script>
+
+<div class="chart-container" style="position: absolute; height:40vh; width:80vw">
+    <canvas id="myChart"></canvas>
+</div>
+<script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var mixedChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                datasets: [{
+                    label: "# of confirmed",
+                    data: {{ context.total_values[:100]|safe }},
+                    backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                    yAxisID: 'y-axis-1',
+                    borderColor:'rgba(255, 99, 132, 1)',
+            // this dataset is drawn below
+            order: 1
+        }, {
+            label: 'cases per million',
+            data: {{ context.cases_per_million[: 100]|safe }},
+            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            yAxisID: 'y-axis-2',
+            type: 'line',
+            // this dataset is drawn on top
+            order: 2
+        }],
+        labels: {{ context.countries[: 100]|safe }}
+        },
+        options: {
+                responsive: true,
+                    title: {
+                    display: true,
+                        text: 'Chart.js Bar Chart - Multi Axis'
+                },
+                tooltips: {
+                    mode: 'index',
+                        intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            autoSkip: false
+                        }
+                    }],
+                    yAxes: [{
+                        type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: 'left',
+                        id: 'y-axis-1',
+                    }, {
+                        type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: 'right',
+                        id: 'y-axis-2',
+                        gridLines: {
+                            drawOnChartArea: false
+                        }
+                    }],
+					}
+            }
+    });
+</script>
+{% endblock my_content %}
