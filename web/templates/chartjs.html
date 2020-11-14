@@ -37,6 +37,42 @@
 {% endblock script %}
 
 {% block my_content %}
+<div class="row">
+    <div class="col-sm">
+        <!-- small box -->
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3>44</h3>
+    
+                <p>User Registrations</p>
+            </div>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-sm">
+        <!-- small box -->
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>53<sup style="font-size: 20px">%</sup></h3>
+
+                <p>Bounce Rate</p>
+            </div>
+        </div>
+    </div>
+    <!-- ./col -->
+    <!-- ./col -->
+    <div class="col-sm">
+        <!-- small box -->
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3>65</h3>
+
+                <p>Global death</p>
+            </div>
+        </div>
+    </div>
+    <!-- ./col -->
+</div>
 <div id="container"></div>
 <script>
     Highcharts.getJSON('https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/world-population-density.json', function (data) {
@@ -115,7 +151,9 @@
 
 <div class="chart-container" style="position: absolute; height:40vh; width:80vw">
     <canvas id="myChart"></canvas>
+    <canvas id="timeSeriesChart"></canvas>
 </div>
+
 <script>
         var ctx = document.getElementById('myChart').getContext('2d');
         var mixedChart = new Chart(ctx, {
@@ -174,5 +212,31 @@
 					}
             }
     });
+</script>
+<script>
+    var ctx = document.getElementById('timeSeriesChart').getContext('2d');
+
+    var startDate = new Date(2020, 0, 1);
+    var labels = [];
+    for (let i = 0; i < 6; i++) {
+        var date = moment(startDate).add(i, 'days').format('YYYY-MM-DD');
+        labels.push(date.toString());
+    }
+
+    var chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                borderWidth: 5,
+                fill: false,
+                borderColor: 'green'
+            }]
+        },
+        options: {}
+    });
+
 </script>
 {% endblock my_content %}
