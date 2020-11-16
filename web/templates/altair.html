@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+{% block script %}
+<!-- Vega Tooltip
+            <script src="https://vega.github.io/vega-tooltip/vega-tooltip.min.js"></script>
+            <link rel="stylesheet" type="text/css" href="https://vega.github.io/vega-tooltip/vega-tooltip.css">-->
+<!-- Import Vega 3 & Vega-Lite 2 (does not have to be from CDN) -->
+<link rel="stlesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/vega-tooltip@0.16.0/vega-tooltip.scss">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-tooltip@0.16.0/build/vega-tooltip.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/vega@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.0.0-rc12"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script> -->
+<script src="https://vega.github.io/datalib/datalib.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+<style>
+#inner {
+display: table;
+margin: 0 auto;
+border: 1px solid black;
+}
+
+#outer {
+border: 1px solid red;
+width:100%
+}
+</style>
+
+{% endblock script %}
+
+
+{% block my_content %}
+<div class="row">
+    <div class="col-sm">
+        <!-- small box -->
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3>44</h3>
+
+                <p>User Registrations</p>
+            </div>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-sm">
+        <!-- small box -->
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>53<sup style="font-size: 20px">%</sup></h3>
+
+                <p>Bounce Rate</p>
+            </div>
+        </div>
+    </div>
+    <!-- ./col -->
+    <!-- ./col -->
+    <div class="col-sm">
+        <!-- small box -->
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3>65</h3>
+
+                <p>Global death</p>
+            </div>
+        </div>
+    </div>
+    <!-- ./col -->
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+        </div>
+        <div class="col-6">
+            <div id="geo"></div>
+        </div>
+        <div class="col">
+        </div>
+    </div>
+    <div class="row">
+        <div id="global-cases"></div>
+    <hr>
+    <div class="row">
+        <div id="global-time"></div>
+    </div>
+    <!-- Placeholder for the tooltip -->
+    <div id="vis-tooltip" class="vg-tooltip"></div>
+</div>
+<!-- Render Charts -->
+<script type="text/javascript">
+    function parse(url, div) {
+        var opt = {
+            mode: "vega-lite",
+            renderer: "svg",
+            actions: { export: true, source: false, editor: false }
+        };
+        vegaEmbed("#" + div, url, opt, function (error, result) {
+            // result.view is the Vega View, url is the original Vega-Lite specification
+            vegaTooltip.vegaLite(result.view, url);
+        });
+    }
+    parse({{ context.plot_geo_analysis | safe }}, "geo")
+    parse({{ context.plot_global_cases_per_country | safe }}, "global-cases")
+    parse({{ context.plot_global_time_series | safe }}, "global-time");
+</script>
+{% endblock my_content %}
