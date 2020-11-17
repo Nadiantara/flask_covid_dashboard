@@ -8,7 +8,43 @@ put your custom script or styling here
 
 
 {% block my_content %}
+<!-- Confirmed, Recovered, Deaths Card -->
+<div class="row">
+    <div class="col-sm">
+        <!-- small box -->
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3>44</h3>
 
+                <p>User Registrations</p>
+            </div>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-sm">
+        <!-- small box -->
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>53<sup style="font-size: 20px">%</sup></h3>
+
+                <p>Bounce Rate</p>
+            </div>
+        </div>
+    </div>
+    <!-- ./col -->
+    <!-- ./col -->
+    <div class="col-sm">
+        <!-- small box -->
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3>65</h3>
+
+                <p>Global death</p>
+            </div>
+        </div>
+    </div>
+    <!-- ./col -->
+</div>
 <!-- Plotly plot placeholder -->
 <div class="container-fluid">
     <div class="row">
@@ -16,11 +52,11 @@ put your custom script or styling here
         </div>
             <div class="col-6">
                 <!-- Placeholder for map-->
-                <div class="chart" id="bargraph">
+                <div class="chart" id="plotly-geo">
 
                     <script>
-                        var graphs = {{ plot_1 | safe }};
-                        Plotly.plot('bargraph', graphs, {});
+                        var graphs = {{ context.plot_geo_analysis | safe }};
+                        Plotly.plot('plotly-geo', graphs, {});
                     </script>
                 </div>
             </div>
@@ -29,20 +65,20 @@ put your custom script or styling here
     </div>
         <div class="row">
         <!-- Placeholder for the global-cases plot-->
-            <div class="chart" id="bargraph2">
+            <div class="chart" id="plotly-global">
                 <script>
-                    var graphs = {{ plot_2 | safe }};
-                    Plotly.plot('bargraph2', graphs, {});
+                    var graphs = {{ context.plot_global_cases_per_country | safe }};
+                    Plotly.plot('plotly-global', graphs, {});
                 </script>
             </div>
         </div>
         <hr>
         <div class="row">
             <!-- Placeholder for global-time series -->
-            <div class="chart" id="bargraph2">
+            <div class="chart" id="plotly-timeseries">
                 <script>
-                    var graphs = {{ plot_2 | safe }};
-                    Plotly.plot('bargraph2', graphs, {});
+                    var graphs = {{ context.plot_global_time_series | safe }};
+                    Plotly.plot('plotly-timeseries', graphs, {});
                 </script>
             </div>
         </div>

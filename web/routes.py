@@ -15,7 +15,7 @@ import json
 
 
 
-#for altair and plotly
+#loading data
 (total_confirmed, total_death, total_recovered, 
  df_pop, total_all_confirmed, total_all_recovered, total_all_deaths) = utils.load_data()
 
@@ -60,11 +60,11 @@ def plot_altair_global():
 
 @app.route("/plotly")
 def plot_plotly_global():
-    plot_global_cases_per_country = altair_plot.altair_global_cases_per_country(
+    plot_global_cases_per_country = plotly_plot.plotly_global_cases_per_country(
         final_df)
-    plot_global_time_series = altair_plot.altair_global_time_series(
+    plot_global_time_series = plotly_plot.plotly_global_timeseries(
         timeseries_final)
-    plot_geo_analysis = altair_plot.altair_geo_analysis(final_df)
+    plot_geo_analysis = plotly_plot.plotly_geo_analysis(final_df)
     context = {'plot_global_cases_per_country': plot_global_cases_per_country, 'plot_global_time_series': plot_global_time_series,
                'plot_geo_analysis': plot_geo_analysis}
     return render_template('plotly.html', context=context)

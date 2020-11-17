@@ -20,7 +20,7 @@ def plotly_geo_analysis(final_df):
 
     fig = go.Figure(data=go.Choropleth(
         locations=df['code3'],
-        z=df['cases/million'],
+        z=df['confirmed'],
         text=df['Country/Region'],
         colorscale='Darkmint',
         autocolorscale=False,
@@ -28,11 +28,15 @@ def plotly_geo_analysis(final_df):
         marker_line_color='darkgray',
         marker_line_width=0.5,
         colorbar_tickprefix='',
-        colorbar_title='#cases <br>per million populations',
+        colorbar_title='#confirmed',
     ))
 
     fig.update_layout(
-        title_text='Covid 19 confirmed cases',
+        title={'text': "Total Confirmed Cases by Country",
+               'y': 0.9,
+               'x': 0.5,
+                'xanchor': 'center',
+                'yanchor': 'top'},
         geo=dict(
             showframe=False,
             showcoastlines=False,
@@ -46,13 +50,14 @@ def plotly_geo_analysis(final_df):
             text='Source: <a href="https://github.com/CSSEGISandData/COVID-19">\
                 CSSE at Johns Hopkins University</a>',
             showarrow=False
-        )]
+        )],
+        width=700, height=600
     )
     plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return plot_json
 
 
-def global_cases_per_country(final_df):
+def plotly_global_cases_per_country(final_df):
     # Plotly plot 2: Per country total cases and cases/million populations
 
     df = final_df
@@ -121,6 +126,7 @@ def plotly_global_timeseries(timeseries_final):
     fig = px.line(df, x='date', y=[
                   'daily new cases', 'daily new recovered', 'daily new deaths'], title='Global daily new cases')
 
-    fig = fig.update_xaxes(rangeslider_visible=True)
+    fig.update_xaxes(rangeslider_visible=True)
+    fig.update_layout(width=1500, height=500)
     plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return plot_json
