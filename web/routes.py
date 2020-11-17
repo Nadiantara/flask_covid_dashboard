@@ -14,8 +14,10 @@ import json
 # Loading raw data and clean it
 
 #for chart_js
+utils.load_chartjs_map_data()
 final_df_cjs = utils.load_confirmed()
 
+#for altair and plotly
 (total_confirmed, total_death, total_recovered, 
  df_pop, total_all_confirmed, total_all_recovered, total_all_deaths) = utils.load_data()
 

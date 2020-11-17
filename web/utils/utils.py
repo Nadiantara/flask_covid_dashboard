@@ -6,6 +6,18 @@ import json
 
 
 
+def load_chartjs_map_data():
+  # ref : https://www.highcharts.com/demo/maps/tooltip
+  chartjs_ccode = pd.read_json(
+      "https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/world-population-density.json")
+  chartjs_ccode
+  hartjs_map = final_df[["code3", "Country/Region", "confirmed"]]
+  chartjs_map.columns = ["code3", "name", "value"]
+  chart_json = chartjs_map.to_dict('records')
+
+  with open('web/dataset/chart_js.json', 'w') as fout:
+      json.dump(chart_json, fout)
+
 
 
 def load_confirmed():
@@ -20,7 +32,8 @@ def load_confirmed():
                       regex=True, inplace=True)
   barPlotVals = barPlotData["values"].values.tolist()
   countryNames = barPlotData["Country/Region"].values.tolist()
-  df_pop = pd.read_json('web/dataset/population.json')
+  pd.read_json(
+      'https://raw.githubusercontent.com/samayo/country-json/master/src/country-by-population.json')
   df_pop.columns = ['Country/Region', 'population']
   final_df = pd.merge(barPlotData, df_pop, how='inner', on='Country/Region')
   final_df['cases/million'] = (final_df['values']/final_df['population'])*1000000
@@ -39,7 +52,8 @@ def load_recovered():
                     regex=True, inplace=True)
   barPlotVals = barPlotData["values"].values.tolist()
   countryNames = barPlotData["Country/Region"].values.tolist()
-  df_pop = pd.read_json('web/dataset/population.json')
+  df_pop = pd.read_json(
+      'https://raw.githubusercontent.com/samayo/country-json/master/src/country-by-population.json')
   df_pop.columns = ['Country/Region', 'population']
   final_df = pd.merge(barPlotData, df_pop, how='inner', on='Country/Region')
   final_df['cases/million'] = (final_df['values']/final_df['population'])*1000000
@@ -59,7 +73,8 @@ def load_deaths():
                       regex=True, inplace=True)
   barPlotVals = barPlotData["values"].values.tolist()
   countryNames = barPlotData["Country/Region"].values.tolist()
-  df_pop = pd.read_json('web/dataset/population.json')
+  df_pop = pd.read_json(
+      'https://raw.githubusercontent.com/samayo/country-json/master/src/country-by-population.json')
   df_pop.columns = ['Country/Region', 'population']
   final_df = pd.merge(barPlotData, df_pop, how='inner', on='Country/Region')
   final_df['cases/million'] = (final_df['values'] /
