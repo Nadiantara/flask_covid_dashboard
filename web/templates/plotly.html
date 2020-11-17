@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block script %}
+<!-- 
+put your custom script or styling here
+
+-->
+{% endblock script %}
+
+
+{% block my_content %}
+
+<!-- Plotly plot placeholder -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+        </div>
+            <div class="col-6">
+                <!-- Placeholder for map-->
+                <div class="chart" id="bargraph">
+
+                    <script>
+                        var graphs = {{ plot_1 | safe }};
+                        Plotly.plot('bargraph', graphs, {});
+                    </script>
+                </div>
+            </div>
+        <div class="col">
+        </div>
+    </div>
+        <div class="row">
+        <!-- Placeholder for the global-cases plot-->
+            <div class="chart" id="bargraph2">
+                <script>
+                    var graphs = {{ plot_2 | safe }};
+                    Plotly.plot('bargraph2', graphs, {});
+                </script>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <!-- Placeholder for global-time series -->
+            <div class="chart" id="bargraph2">
+                <script>
+                    var graphs = {{ plot_2 | safe }};
+                    Plotly.plot('bargraph2', graphs, {});
+                </script>
+            </div>
+        </div>
+    </div>
+
+{% endblock my_content %}

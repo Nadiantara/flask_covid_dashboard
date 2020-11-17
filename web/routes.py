@@ -13,9 +13,7 @@ import json
 
 # Loading raw data and clean it
 
-#for chart_js
-utils.load_chartjs_map_data()
-final_df_cjs = utils.load_confirmed()
+
 
 #for altair and plotly
 (total_confirmed, total_death, total_recovered, 
@@ -26,12 +24,19 @@ final_df_cjs = utils.load_confirmed()
 
 final_df = utils.merge_data(grouped_total_confirmed,
                             grouped_total_recovered, grouped_total_death, df_pop)
+
+#for chart_js map
+utils.load_chartjs_map_data(final_df, df_pop)
+
+
+
+
 @app.route("/")
 @app.route("/index")
 def index():
-    countries = final_df_cjs['Country/Region'].values.tolist()
-    total_values = final_df_cjs['values'].values.tolist()
-    cases_per_million = final_df_cjs['cases/million'].values.round(2).tolist()
+    countries = final_df['Country/Region'].values.tolist()
+    total_values = final_df['confirmed'].values.tolist()
+    cases_per_million = final_df['cases/million'].values.round(2).tolist()
     #load json file for highchart map 
     with open('web/dataset/chart_js.json') as f:
         datamap = json.load(f)
@@ -62,6 +67,6 @@ def plot_plotly_global():
     plot_geo_analysis = altair_plot.altair_geo_analysis(final_df)
     context = {'plot_global_cases_per_country': plot_global_cases_per_country, 'plot_global_time_series': plot_global_time_series,
                'plot_geo_analysis': plot_geo_analysis}
-    return render_template('altair.html', context=context)
+    return render_template('plotly.html', context=context)
 
     

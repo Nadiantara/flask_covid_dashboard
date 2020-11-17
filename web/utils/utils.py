@@ -5,82 +5,17 @@ import pandas as pd
 import json
 
 
-
-def load_chartjs_map_data():
+def load_chartjs_map_data(final_df, df_pop):
   # ref : https://www.highcharts.com/demo/maps/tooltip
   chartjs_ccode = pd.read_json(
       "https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/world-population-density.json")
   chartjs_ccode
-  hartjs_map = final_df[["code3", "Country/Region", "confirmed"]]
+  chartjs_map = final_df[["code3", "Country/Region", "confirmed"]]
   chartjs_map.columns = ["code3", "name", "value"]
   chart_json = chartjs_map.to_dict('records')
 
   with open('web/dataset/chart_js.json', 'w') as fout:
       json.dump(chart_json, fout)
-
-
-
-def load_confirmed():
-  confirmedGlobal = pd.read_csv(
-      'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv', encoding='utf-8', na_values=None)
-  barPlotData = confirmedGlobal[["Country/Region", confirmedGlobal.columns[-1]]].groupby(
-      "Country/Region").sum().sort_values(by=confirmedGlobal.columns[-1], ascending=False)
-  barPlotData.reset_index(inplace=True)
-  barPlotData.columns = ["Country/Region", 'values']
-  barPlotData = barPlotData.sort_values(by='values', ascending=False)
-  barPlotData.replace(to_replace='US', value='United States',
-                      regex=True, inplace=True)
-  barPlotVals = barPlotData["values"].values.tolist()
-  countryNames = barPlotData["Country/Region"].values.tolist()
-  pd.read_json(
-      'https://raw.githubusercontent.com/samayo/country-json/master/src/country-by-population.json')
-  df_pop.columns = ['Country/Region', 'population']
-  final_df = pd.merge(barPlotData, df_pop, how='inner', on='Country/Region')
-  final_df['cases/million'] = (final_df['values']/final_df['population'])*1000000
-  final_df.dropna(subset=['cases/million'], inplace=True)
-  return final_df
-
-def load_recovered():
-  confirmedGlobal = pd.read_csv(
-    'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv', encoding='utf-8', na_values=None)
-  barPlotData = confirmedGlobal[["Country/Region", confirmedGlobal.columns[-1]]].groupby(
-    "Country/Region").sum().sort_values(by=confirmedGlobal.columns[-1], ascending=False)
-  barPlotData.reset_index(inplace=True)
-  barPlotData.columns = ["Country/Region", 'values']
-  barPlotData = barPlotData.sort_values(by='values', ascending=False)
-  barPlotData.replace(to_replace='US', value='United States',
-                    regex=True, inplace=True)
-  barPlotVals = barPlotData["values"].values.tolist()
-  countryNames = barPlotData["Country/Region"].values.tolist()
-  df_pop = pd.read_json(
-      'https://raw.githubusercontent.com/samayo/country-json/master/src/country-by-population.json')
-  df_pop.columns = ['Country/Region', 'population']
-  final_df = pd.merge(barPlotData, df_pop, how='inner', on='Country/Region')
-  final_df['cases/million'] = (final_df['values']/final_df['population'])*1000000
-  final_df.dropna(subset=['cases/million'], inplace=True)
-  return final_df
-  
-
-def load_deaths():
-  confirmedGlobal = pd.read_csv(
-      'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv', encoding='utf-8', na_values=None)
-  barPlotData = confirmedGlobal[["Country/Region", confirmedGlobal.columns[-1]]].groupby(
-      "Country/Region").sum().sort_values(by=confirmedGlobal.columns[-1], ascending=False)
-  barPlotData.reset_index(inplace=True)
-  barPlotData.columns = ["Country/Region", 'values']
-  barPlotData = barPlotData.sort_values(by='values', ascending=False)
-  barPlotData.replace(to_replace='US', value='United States',
-                      regex=True, inplace=True)
-  barPlotVals = barPlotData["values"].values.tolist()
-  countryNames = barPlotData["Country/Region"].values.tolist()
-  df_pop = pd.read_json(
-      'https://raw.githubusercontent.com/samayo/country-json/master/src/country-by-population.json')
-  df_pop.columns = ['Country/Region', 'population']
-  final_df = pd.merge(barPlotData, df_pop, how='inner', on='Country/Region')
-  final_df['cases/million'] = (final_df['values'] /
-                               final_df['population'])*1000000
-  final_df.dropna(subset=['cases/million'], inplace=True)
-  return final_df
 
 
 #loading data
@@ -219,7 +154,6 @@ def merge_data(grouped_total_confirmed, grouped_total_recovered, grouped_total_d
                         how='inner', on='Country/Region')
     final_df = final_df.sort_values(by="confirmed", ascending=False)
     final_df.reset_index(inplace=True, drop=True)
-    final_df.to_json("new_map.json")
 
     # calculate cases/million and total death rate
     final_df['cases/million'] = ((final_df['confirmed'] /
