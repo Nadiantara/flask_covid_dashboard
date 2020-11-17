@@ -104,7 +104,7 @@ def altair_global_time_series(timeseries_final):
     chart = alt.layer(
         line, selectors, points, rules, text
     ).properties(
-        width=1200, height=500
+        width=1300, height=500
     )
     chart_json = chart.to_json()
     return chart_json

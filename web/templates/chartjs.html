@@ -37,6 +37,7 @@
 {% endblock script %}
 
 {% block my_content %}
+<!-- Confirmed, Recovered, Deaths Card -->
 <div class="row">
     <div class="col-sm">
         <!-- small box -->
@@ -73,8 +74,20 @@
     </div>
     <!-- ./col -->
 </div>
+
+<!-- Map Container-->
 <div id="container"></div>
+
+<!-- other global per country and time series chart.js canvas -->
+<div class="chart-container" style="position: absolute; height:40vh; width:80vw">
+    <canvas id="myChart"></canvas>
+    <canvas id="timeSeriesChart"></canvas>
+</div>
+
+<!-- Script for map analysis -->
 <script>
+    //Put custom data here
+    var datamap = {{context.datamap|safe}}
     Highcharts.getJSON('https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/world-population-density.json', function (data) {
 
             // Prevent logarithmic errors in color calulcation
@@ -90,12 +103,12 @@
                 },
 
                 title: {
-                    text: 'Fixed tooltip with HTML'
+                    text: 'Total confirmed cases'
                 },
 
                 legend: {
                     title: {
-                        text: 'Population density per km²',
+                        text: 'Total confirmed cases',
                         style: {
                             color: ( // theme
                                 Highcharts.defaultOptions &&
@@ -123,7 +136,7 @@
                     padding: 0,
                     pointFormat: '<span class="f32"><span class="flag {point.properties.hc-key}">' +
                         '</span></span> {point.name}<br>' +
-                        '<span style="font-size:30px">{point.value}/km²</span>',
+                        '<span style="font-size:20px">{point.value} cases</span>',
                     positioner: function () {
                         return { x: 0, y: 250 };
                     }
@@ -131,14 +144,14 @@
 
                 colorAxis: {
                     min: 1,
-                    max: 1000,
+                    max: 10000000,
                     type: 'logarithmic'
                 },
 
                 series: [{
-                    data: data,
+                    data: datamap,
                     joinBy: ['iso-a3', 'code3'],
-                    name: 'Population density',
+                    name: 'Total confirmed cases',
                     states: {
                         hover: {
                             color: '#a4edba'
@@ -149,11 +162,7 @@
         });
 </script>
 
-<div class="chart-container" style="position: absolute; height:40vh; width:80vw">
-    <canvas id="myChart"></canvas>
-    <canvas id="timeSeriesChart"></canvas>
-</div>
-
+<!-- Script for global per country and time series analysis -->
 <script>
         var ctx = document.getElementById('myChart').getContext('2d');
         var mixedChart = new Chart(ctx, {

@@ -9,6 +9,7 @@ from scipy.stats import zscore
 import scipy.stats as stats
 import csv
 import requests
+import json
 
 # Loading raw data and clean it
 
@@ -29,8 +30,12 @@ def index():
     countries = final_df_cjs['Country/Region'].values.tolist()
     total_values = final_df_cjs['values'].values.tolist()
     cases_per_million = final_df_cjs['cases/million'].values.round(2).tolist()
+    #load json file for highchart map 
+    with open('web/dataset/chart_js.json') as f:
+        datamap = json.load(f)
+
     context = {'countries': countries, 'total_values': total_values,
-               'cases_per_million': cases_per_million}
+               'cases_per_million': cases_per_million, 'datamap':datamap}
     return render_template('chartjs.html', context=context)
 
 
