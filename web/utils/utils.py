@@ -36,11 +36,8 @@ def load_data():
     df_pop.columns = ['Country/Region', 'population']
     df_pop = df_pop.replace(to_replace='Russian Federation', value='Russia')
 
-    # total confirmed cases globally
-    total_all_confirmed = total_confirmed[total_confirmed.columns[-1]].sum()
-    total_all_recovered = total_recovered[total_recovered.columns[-1]].sum()
-    total_all_deaths = total_death[total_death.columns[-1]].sum()
-    return total_confirmed, total_death, total_recovered, df_pop, total_all_confirmed, total_all_recovered, total_all_deaths
+
+    return total_confirmed, total_death, total_recovered, df_pop
 
 
 def preprocessed_data(total_confirmed, total_death, total_recovered):

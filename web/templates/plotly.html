@@ -14,9 +14,9 @@ put your custom script or styling here
         <!-- small box -->
         <div class="small-box bg-warning">
             <div class="inner">
-                <h3>44</h3>
+                <h3>{{context.total_all_confirmed}}</h3>
 
-                <p>User Registrations</p>
+                <p>Total Confirmed</p>
             </div>
         </div>
     </div>
@@ -25,9 +25,9 @@ put your custom script or styling here
         <!-- small box -->
         <div class="small-box bg-success">
             <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
+                <h3>{{context.total_all_recovered}}<sup style="font-size: 20px"></sup></h3>
 
-                <p>Bounce Rate</p>
+                <p>Total Recovered</p>
             </div>
         </div>
     </div>
@@ -37,9 +37,9 @@ put your custom script or styling here
         <!-- small box -->
         <div class="small-box bg-danger">
             <div class="inner">
-                <h3>65</h3>
+                <h3>{{context.total_all_deaths}}</h3>
 
-                <p>Global death</p>
+                <p>Total Deaths</p>
             </div>
         </div>
     </div>
@@ -55,6 +55,7 @@ put your custom script or styling here
                 <div class="chart" id="plotly-geo">
 
                     <script>
+                        //Parse your Json variable here
                         var graphs = {{ context.plot_geo_analysis | safe }};
                         Plotly.plot('plotly-geo', graphs, {});
                     </script>
@@ -67,6 +68,7 @@ put your custom script or styling here
         <!-- Placeholder for the global-cases plot-->
             <div class="chart" id="plotly-global">
                 <script>
+                    //Parse your Json variable here
                     var graphs = {{ context.plot_global_cases_per_country | safe }};
                     Plotly.plot('plotly-global', graphs, {});
                 </script>
@@ -77,6 +79,7 @@ put your custom script or styling here
             <!-- Placeholder for global-time series -->
             <div class="chart" id="plotly-timeseries">
                 <script>
+                    //Parse your Json variable here
                     var graphs = {{ context.plot_global_time_series | safe }};
                     Plotly.plot('plotly-timeseries', graphs, {});
                 </script>

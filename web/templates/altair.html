@@ -14,9 +14,9 @@ put your custom script or styling here
         <!-- small box -->
         <div class="small-box bg-warning">
             <div class="inner">
-                <h3>44</h3>
+                <h3>{{context.total_all_confirmed}}</h3>
 
-                <p>User Registrations</p>
+                <p>Total Confirmed</p>
             </div>
         </div>
     </div>
@@ -25,9 +25,9 @@ put your custom script or styling here
         <!-- small box -->
         <div class="small-box bg-success">
             <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
+                <h3>{{context.total_all_recovered}}<sup style="font-size: 20px"></sup></h3>
 
-                <p>Bounce Rate</p>
+                <p>Total Recovered</p>
             </div>
         </div>
     </div>
@@ -37,15 +37,14 @@ put your custom script or styling here
         <!-- small box -->
         <div class="small-box bg-danger">
             <div class="inner">
-                <h3>65</h3>
+                <h3>{{context.total_all_deaths}}</h3>
 
-                <p>Global death</p>
+                <p>Total Deaths</p>
             </div>
         </div>
     </div>
     <!-- ./col -->
 </div>
-
 <!-- Altair plot placeholder -->
 <div class="container-fluid">
     <div class="row">
@@ -82,6 +81,7 @@ put your custom script or styling here
             vegaTooltip.vegaLite(result.view, url);
         });
     }
+    //Parse your Json variable here
     parse({{ context.plot_geo_analysis | safe }}, "geo")
     parse({{ context.plot_global_cases_per_country | safe }}, "global-cases")
     parse({{ context.plot_global_time_series | safe }}, "global-time");

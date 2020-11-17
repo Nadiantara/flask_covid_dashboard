@@ -43,9 +43,9 @@
         <!-- small box -->
         <div class="small-box bg-warning">
             <div class="inner">
-                <h3>44</h3>
+                <h3>{{context.total_all_confirmed}}</h3>
     
-                <p>User Registrations</p>
+                <p>Total Confirmed</p>
             </div>
         </div>
     </div>
@@ -54,9 +54,9 @@
         <!-- small box -->
         <div class="small-box bg-success">
             <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
+                <h3>{{context.total_all_recovered}}<sup style="font-size: 20px"></sup></h3>
 
-                <p>Bounce Rate</p>
+                <p>Total Recovered</p>
             </div>
         </div>
     </div>
@@ -66,9 +66,9 @@
         <!-- small box -->
         <div class="small-box bg-danger">
             <div class="inner">
-                <h3>65</h3>
+                <h3>{{context.total_all_deaths}}</h3>
 
-                <p>Global death</p>
+                <p>Total Deaths</p>
             </div>
         </div>
     </div>
@@ -149,6 +149,7 @@
                 },
 
                 series: [{
+                    //call the custom data here
                     data: datamap,
                     joinBy: ['iso-a3', 'code3'],
                     name: 'Total confirmed cases',
@@ -170,6 +171,7 @@
             data: {
                 datasets: [{
                     label: "# of confirmed",
+                    //call the list form of dataset here
                     data: {{ context.total_values[:100]|safe }},
                     backgroundColor: 'rgba(255, 99, 132, 0.7)',
                     yAxisID: 'y-axis-1',
@@ -178,6 +180,7 @@
             order: 1
         }, {
             label: 'cases per million',
+             //call the list form of dataset here
             data: {{ context.cases_per_million[: 100]|safe }},
             backgroundColor: 'rgba(54, 162, 235, 0.7)',
             borderColor: 'rgba(54, 162, 235, 1)',
