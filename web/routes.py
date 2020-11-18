@@ -2,14 +2,8 @@ from altair import Chart, X, Y, Axis, Data, DataFormat
 import pandas as pd
 import numpy as np
 from flask import render_template, url_for, flash, redirect, request, make_response, jsonify, abort
-from flask_cors import cross_origin
-import pickle
 from web import app
 from web.utils import utils, altair_plot, plotly_plot
-from scipy.stats import zscore
-import scipy.stats as stats
-import csv
-import requests
 import json
 
 # Loading raw data and clean it
