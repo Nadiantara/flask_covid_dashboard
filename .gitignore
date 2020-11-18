@@ -1,0 +1,8 @@
+*/__pycache__/
+web/__pycache__
+web/utils/__pycache__
+web/.ipynb_checkpoints
+conda/
+.ipynb_checkpoints/
+__pycache__
+.ipynb_checkpoints
