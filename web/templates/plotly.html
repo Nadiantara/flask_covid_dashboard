@@ -53,12 +53,6 @@ put your custom script or styling here
             <div class="col-6">
                 <!-- Placeholder for map-->
                 <div class="chart" id="plotly-geo">
-
-                    <script>
-                        //Parse your Json variable here
-                        var graphs = {{ context.plot_geo_analysis | safe }};
-                        Plotly.plot('plotly-geo', graphs, {});
-                    </script>
                 </div>
             </div>
         <div class="col">
@@ -67,24 +61,29 @@ put your custom script or styling here
         <div class="row">
         <!-- Placeholder for the global-cases plot-->
             <div class="chart" id="plotly-global">
-                <script>
-                    //Parse your Json variable here
-                    var graphs = {{ context.plot_global_cases_per_country | safe }};
-                    Plotly.plot('plotly-global', graphs, {});
-                </script>
             </div>
         </div>
         <hr>
         <div class="row">
             <!-- Placeholder for global-time series -->
-            <div class="chart" id="plotly-timeseries">
-                <script>
-                    //Parse your Json variable here
-                    var graphs = {{ context.plot_global_time_series | safe }};
-                    Plotly.plot('plotly-timeseries', graphs, {});
-                </script>
-            </div>
+            <div id="plotly-timeseries"></div>
         </div>
     </div>
-
+</div>
+<!-- Script to execute the Json ( we can create it also with looping) -->
+<script>
+    //Parse your Json variable here
+    var graphs = {{ context.plot_geo_analysis | safe }};
+    Plotly.plot('plotly-geo', graphs, {});
+</script>
+<script>
+    //Parse your Json variable here
+    var graphs = {{ context.plot_global_cases_per_country | safe }};
+    Plotly.plot('plotly-global', graphs, {});
+</script>
+<script>
+    //Parse your Json variable here
+    var graphs = {{ context.plot_global_time_series | safe }};
+    Plotly.plot('plotly-timeseries', graphs, {});
+</script>
 {% endblock my_content %}

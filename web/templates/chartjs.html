@@ -79,12 +79,12 @@
 <div id="container"></div>
 
 <!-- other global per country and time series chart.js canvas -->
-<div class="chart-container" style="position: absolute; height:40vh; width:80vw">
+<div style="position: absolute; height:30vh; width:70vw">
     <canvas id="myChart"></canvas>
     <canvas id="timeSeriesChart"></canvas>
 </div>
 
-<!-- Script for map analysis -->
+<!-- Script for map analysis using Highcharts (not chartjs)-->
 <script>
     //Put custom data here
     var datamap = {{context.datamap|safe}}
@@ -228,26 +228,43 @@
 <script>
     var ctx = document.getElementById('timeSeriesChart').getContext('2d');
 
-    var startDate = new Date(2020, 0, 1);
-    var labels = [];
-    for (let i = 0; i < 6; i++) {
-        var date = moment(startDate).add(i, 'days').format('YYYY-MM-DD');
-        labels.push(date.toString());
-    }
+    var labels = {{ context.timeseries_dates| safe }};
 
     var chart = new Chart(ctx, {
         type: 'line',
         data: {
             labels,
             datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
+                label: '# daily new confirmed',
+                data: {{ context.confirmed_timeseries | safe }},
                 borderWidth: 5,
                 fill: false,
-                borderColor: 'green'
-            }]
+                borderColor: '#fc8403'
+            }, {
+                label: '# daily new death',
+                data: {{ context.death_timeseries | safe }},
+                borderWidth: 5,
+                fill: false,
+                borderColor: '#fc0367'
+            }, {
+                    label: '# daily new recovered',
+                    data: {{ context.recovered_timeseries | safe }},
+                    borderWidth: 5,
+                    fill: false,
+                    borderColor: '#03fc84'
+                }
+            ]
         },
-        options: {}
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Timeseries'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: true
+            }}
     });
 
 </script>

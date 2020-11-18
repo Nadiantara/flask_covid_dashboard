@@ -13,6 +13,7 @@ from vega_datasets import data
 from plotly.subplots import make_subplots
 import plotly.express as px
 import json
+from web.utils.utils import get_by_country_merged
 
 def plotly_geo_analysis(final_df):
     #Plotly plot 1: Geographical analysis
@@ -125,6 +126,22 @@ def plotly_global_timeseries(timeseries_final):
     #notice that I use plotly express (px) not graph_objects as before, just for more variances
     fig = px.line(df, x='date', y=[
                   'daily new cases', 'daily new recovered', 'daily new deaths'], title='Global daily new cases')
+
+    fig.update_xaxes(rangeslider_visible=True)
+    fig.update_layout(width=1500, height=500)
+    plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    return plot_json
+
+
+def plotly_per_country_time_series(total_confirmed, total_death, total_recovered, country_name):
+    #Plotly plot 3a per country time series chart for daily new cases, recovered, and deaths
+    # I use Indonesia data
+    df = get_by_country_merged(
+        total_confirmed, total_death, total_recovered, country_name)
+    #column name: date	value_confirmed	daily_new_confirmed	value_death	daily_new_death	value_recovered	daily_new_recovered
+
+    fig = px.line(df, x='date', y=['daily_new_confirmed', 'daily_new_death',
+                                   'daily_new_recovered'], title=f'{country_name} daily  cases')
 
     fig.update_xaxes(rangeslider_visible=True)
     fig.update_layout(width=1500, height=500)

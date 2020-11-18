@@ -191,5 +191,34 @@ def get_by_country_merged(total_confirmed, total_death, total_recovered, country
         country_confirmed_tseries, country_death_tseries, how='inner', on='date')
     country_timeseries_final = pd.merge(
         country_timeseries_final, country_recovered_tseries, how='inner', on='date')
-    country_timeseries_final
+    country_timeseries_final.reset_index(inplace=True)
     return country_timeseries_final
+
+
+def get_per_country_data(total_confirmed, total_death, total_recovered, country_name):
+    #total confirmed per country
+    total_confirmed_per_country = total_confirmed.groupby(
+        "Country/Region").sum()
+    total_confirmed_per_country.reset_index(inplace=True)
+    mask = (total_confirmed_per_country['Country/Region'] == country_name)
+    total_confirmed_per_country = total_confirmed_per_country.loc[mask]
+    total_confirmed_per_country = total_confirmed_per_country[
+        total_confirmed_per_country.columns[-1]].sum()
+
+    #total deaths per country
+    total_death_per_country = total_death.groupby("Country/Region").sum()
+    total_death_per_country.reset_index(inplace=True)
+    mask = (total_death_per_country['Country/Region'] == country_name)
+    total_death_per_country = total_death_per_country.loc[mask]
+    total_death_per_country = total_death_per_country[total_death_per_country.columns[-1]].sum(
+    )
+
+    #total recovered per country
+    total_recovered_per_country = total_recovered.groupby(
+        "Country/Region").sum()
+    total_recovered_per_country.reset_index(inplace=True)
+    mask = (total_recovered_per_country['Country/Region'] == country_name)
+    total_recovered_per_country = total_recovered_per_country.loc[mask]
+    total_recovered_per_country = total_recovered_per_country[
+        total_recovered_per_country.columns[-1]].sum()
+    return total_confirmed_per_country, total_death_per_country, total_recovered_per_country
