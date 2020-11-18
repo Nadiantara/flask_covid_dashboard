@@ -1,0 +1,133 @@
+{% extends "layout.html" %}
+{% block script %}
+<!-- 
+put your custom script or styling here
+-->
+{% endblock script %}
+{% block my_content %}
+<!-- Confirmed, Recovered, Deaths Card -->
+<div class="row">
+    <div class="col-sm">
+        <!-- small box -->
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3>{{context.total_confirmed_per_country}}</h3>
+
+                <p>Total Confirmed</p>
+            </div>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-sm">
+        <!-- small box -->
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>{{context.total_recovered_per_country}}<sup style="font-size: 20px"></sup></h3>
+
+                <p>Total Recovered</p>
+            </div>
+        </div>
+    </div>
+    <!-- ./col -->
+    <!-- ./col -->
+    <div class="col-sm">
+        <!-- small box -->
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3>{{context.total_death_per_country}}</h3>
+
+                <p>Total Deaths {{ context.timeseries_dates[-1] }}</p>
+            </div>
+        </div>
+    </div>
+    <!-- ./col -->
+</div>
+
+<div class="container-fluid">
+    <!-- Placeholder for the altair-->
+    <div class="row">
+        <div id="plotly-country"></div>
+    </div>
+    <div class="row">
+        <!-- Placeholder for the altair-->
+        <div id="altair-country"></div>
+        <hr>
+        <div class="row">
+            <!-- Placeholder for the chart js notice that it use canvas-->
+        </div>
+        <!-- Placeholder for the tooltip -->
+        <div id="vis-tooltip" class="vg-tooltip"></div>
+    </div>
+</div>
+<div class="container-fluid">
+    <canvas id="chartjs-time-series"></canvas>
+</div>
+<!-- Script to execute the Json -->
+<!-- Plotly -->
+<script>
+    //Parse your Json variable here
+    var graphs = {{ context.plotly_country_plot | safe }};
+    Plotly.plot('plotly-country', graphs, {});
+</script>
+<!-- Altair -->
+<script type="text/javascript">
+    function parse(url, div) {
+        var opt = {
+            mode: "vega-lite",
+            renderer: "svg",
+            actions: { export: true, source: false, editor: false }
+        };
+        vegaEmbed("#" + div, url, opt, function (error, result) {
+            // result.view is the Vega View, url is the original Vega-Lite specification
+            vegaTooltip.vegaLite(result.view, url);
+        });
+    }
+    //Parse your Json variable here
+    parse({{ context.altair_country_plot | safe }}, "altair-country")
+</script>
+<!-- Chart Js -->
+<script>
+    var ctx = document.getElementById('chartjs-time-series').getContext('2d');
+
+    var labels = {{ context.timeseries_dates| safe }};
+
+    var chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [{
+                label: '# daily new confirmed',
+                data: {{ context.confirmed_timeseries | safe }},
+        borderWidth: 5,
+        fill: false,
+        borderColor: '#fc8403'
+    }, {
+        label: '# daily new death',
+        data: {{ context.death_timeseries | safe }},
+    borderWidth: 5,
+        fill: false,
+            borderColor: '#fc0367'
+            }, {
+        label: '# daily new recovered',
+            data: {{ context.recovered_timeseries | safe }},
+        borderWidth: 5,
+            fill: false,
+                borderColor: '#03fc84'
+    }
+            ]
+        },
+    options: {
+        responsive: true,
+            title: {
+            display: true,
+                text: 'Timeseries'
+        },
+        tooltips: {
+            mode: 'index',
+                intersect: true
+        }
+    }
+    });
+
+</script>
+{% endblock my_content %}
