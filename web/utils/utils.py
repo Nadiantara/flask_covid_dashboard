@@ -13,9 +13,9 @@ def load_chartjs_map_data(final_df, df_pop):
   chartjs_map = final_df[["code3", "Country/Region", "confirmed"]]
   chartjs_map.columns = ["code3", "name", "value"]
   chart_json = chartjs_map.to_dict('records')
+  return chart_json
 
-  with open('web/dataset/chart_js.json', 'w') as fout:
-      json.dump(chart_json, fout)
+
 
 
 #loading data

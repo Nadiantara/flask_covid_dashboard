@@ -20,7 +20,7 @@ final_df = utils.merge_data(grouped_total_confirmed,
                             grouped_total_recovered, grouped_total_death, df_pop)
 
 #for chart_js map
-utils.load_chartjs_map_data(final_df, df_pop)
+
 
 
 @app.route("/")
@@ -78,8 +78,7 @@ def plot_chartjs():
     recovered_timeseries = timeseries_final["daily new recovered"].values.tolist()
     timeseries_dates = timeseries_final["date"].values.tolist()
     #load json file for highchart map
-    with open('web/dataset/chart_js.json') as f:
-        datamap = json.load(f)
+    datamap = utils.load_chartjs_map_data(final_df, df_pop)
 
     context = {"total_all_confirmed": total_all_confirmed,
                "total_all_recovered": total_all_recovered, "total_all_deaths": total_all_deaths,
