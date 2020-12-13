@@ -28,6 +28,12 @@ def load_data():
 
     total_recovered = pd.read_csv(
         'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv', encoding='utf-8', na_values=None)
+    total_confirmed.replace(
+        to_replace='US', value='United States', regex=True, inplace=True)
+    total_death.replace(
+        to_replace='US', value='United States', regex=True, inplace=True)
+    total_death.replace(
+        to_replace='US', value='United States', regex=True, inplace=True)
     # I need data that contain population for each country to calculate confirmed cases/population
     # I download it from : https://github.com/samayo/country-json/blob/master/src/country-by-population.json
     df_pop = pd.read_json(
@@ -35,7 +41,7 @@ def load_data():
     #some country name has different  format, so I need to change it to match my first dataset
     df_pop.columns = ['Country/Region', 'population']
     df_pop = df_pop.replace(to_replace='Russian Federation', value='Russia')
-
+    
 
     return total_confirmed, total_death, total_recovered, df_pop
 
