@@ -30,7 +30,7 @@ def load_data():
         'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv', encoding='utf-8', na_values=None)
     total_confirmed.replace(
         to_replace='US', value='United States', regex=True, inplace=True)
-    total_death.replace(
+    total_recovered.replace(
         to_replace='US', value='United States', regex=True, inplace=True)
     total_death.replace(
         to_replace='US', value='United States', regex=True, inplace=True)
